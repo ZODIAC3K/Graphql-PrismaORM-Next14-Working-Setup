@@ -1,8 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// This is Prisma schema file that defines data model for the application. It is used to generate Prisma Client JS library that is used to interact with the database.
+// The schema file is written in Prisma Schema Language. It is a declarative language that allows you to define your data model, relations, and constraints.
+// Prisma supports various types of databases like PostgreSQL, MySQL, SQLite, and SQL Server and can be used with various programming languages like JavaScript, TypeScript, Go, and Rust.
+// Prisma can be used with mongodb as well but it is in beta stage as of now so not good for production use.
+// Best suited for relational databases like PostgreSQL (industry standared), MySQL, SQLite, and SQL Server.
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
@@ -21,12 +22,12 @@ model Novel {
   image     String?
   createdAt  DateTime @default(now())
   updatedAT  DateTime @updatedAt
-  authors    Author[]
+  authors    Author[] // this is a one-to-many relation with the Author model (one Novel to many Authors)
 }
 
 model Author {
   id      String   @id @default(uuid())
   name    String
   Novel   Novel? @relation(fields: [novelId], references: [id]) // this is a one-to-many relation with the Novel model (one Author to many Novels)
-  novelId String?
+  novelId String? // this is the foreign key to the Novel model (the field name is the same as the field name in the Novel model)
 }

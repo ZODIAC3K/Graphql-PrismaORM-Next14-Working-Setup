@@ -3,52 +3,13 @@ import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { prisma } from "../../prisma/db";
 import { PrismaClient } from "@prisma/client";
 
+// we import the typeDefs and resolvers from the graphql folder to make the code more modular and easier to read
+import { typeDefs } from "../../graphql/typedefs";
+import { resolvers } from "../../graphql/resolvers";
+
+// we define the context type which is an object that contains the prisma client instance that we pass this context object to the ApolloServer instance so that we can access the prisma client instance in the resolvers to query the database with prisma client methods like findMany and findUnique etc.
 export type Context = {
 	prisma: PrismaClient;
-};
-
-const typeDefs = `#graphql
-	
-	type Novel {
-		id: ID!
-		title: String
-		image: String
-		createdAt: String
-		updatedAt: String
-		authors: [Author]
-	}
-
-	type Author {
-		id: ID!
-		name: String
-		novelId: String
-	}
-	# query meaning get request
-	type Query {
-		novels: [Novel]
-	}
-	# mutation meaning post, put, delete request
-	type Mutation {
-		addNovel: Novel
-	}
-
-`;
-
-const resolvers = {
-	Query: {
-		novels: async (parent: any, args: any, context: Context) => {
-			return await context.prisma.novel.findMany();
-		},
-	},
-	Novel: {
-		authors: async (parent: any, args: any, context: Context) => {
-			return await context.prisma.author.findMany({
-				where: {
-					novelId: parent.id,
-				},
-			});
-		},
-	},
 };
 
 const apolloServer = new ApolloServer({
