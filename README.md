@@ -5,6 +5,9 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 First, run the development server:
 
 ```bash
+# Make sure to run
+npm prisma generate
+# then move on to running the application...
 npm run dev
 # or
 yarn dev
